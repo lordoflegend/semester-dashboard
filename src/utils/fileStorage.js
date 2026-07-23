@@ -53,3 +53,36 @@ export const deleteFile = async (id) => {
     request.onerror = () => reject(request.error);
   });
 };
+
+export const getAllFiles = async () => {
+  const db = await initDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const request = store.getAll();
+    const requestKeys = store.getAllKeys();
+
+    request.onsuccess = () => {
+      requestKeys.onsuccess = () => {
+        const files = {};
+        for (let i = 0; i < requestKeys.result.length; i++) {
+          files[requestKeys.result[i]] = request.result[i];
+        }
+        resolve(files);
+      };
+    };
+    request.onerror = () => reject(request.error);
+  });
+};
+
+export const clearAllFiles = async () => {
+  const db = await initDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const request = store.clear();
+
+    request.onsuccess = () => resolve(true);
+    request.onerror = () => reject(request.error);
+  });
+};

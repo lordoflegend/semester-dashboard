@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, BookOpen, ClipboardList, Settings } from 'lucide-react';
+import SettingsModal from './SettingsModal';
 
 export default function Sidebar() {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -22,6 +26,19 @@ export default function Sidebar() {
           <span>Assignments</span>
         </NavLink>
       </div>
+
+      <div className="nav-links" style={{ marginTop: 'auto', paddingBottom: '1rem' }}>
+        <button 
+          className="nav-link" 
+          style={{ background: 'transparent', border: 'none', width: '100%', cursor: 'pointer', textAlign: 'left', fontSize: '1rem', fontFamily: 'inherit' }} 
+          onClick={() => setIsSettingsOpen(true)}
+        >
+          <Settings size={20} />
+          <span>Backup & Restore</span>
+        </button>
+      </div>
+
+      {isSettingsOpen && <SettingsModal onClose={() => setIsSettingsOpen(false)} />}
     </div>
   );
 }

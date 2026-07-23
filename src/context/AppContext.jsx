@@ -81,12 +81,20 @@ export function AppProvider({ children }) {
   const updateExam = (updatedExam) => setExams(exams.map(e => e.id === updatedExam.id ? updatedExam : e));
   const deleteExam = (id) => setExams(exams.filter(e => e.id !== id));
 
+  const importState = (metadata) => {
+    if (metadata.courses) setCourses(metadata.courses);
+    if (metadata.assignments) setAssignments(metadata.assignments);
+    if (metadata.lessons) setLessons(metadata.lessons);
+    if (metadata.exams) setExams(metadata.exams);
+  };
+
   return (
     <AppContext.Provider value={{
       courses, addCourse, updateCourse, deleteCourse, reorderCourses, getCourse,
       assignments, addAssignment, updateAssignment, deleteAssignment, toggleAssignmentStatus,
       lessons, addLesson, updateLesson, deleteLesson, reorderLessons,
-      exams, addExam, updateExam, deleteExam
+      exams, addExam, updateExam, deleteExam,
+      importState
     }}>
       {children}
     </AppContext.Provider>
